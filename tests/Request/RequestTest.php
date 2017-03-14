@@ -187,24 +187,4 @@ class RequestTest extends TestCase
         $this->request->v1(true);
         $this->invokeMethod($this->request, 'parseResponse', [$response, $info]);
     }
-
-    public function testPrintDebug()
-    {
-        $this->request->debug(true);
-
-        $actual = $this->invokeMethod($this->request, 'printDebug', ['foo', 'bar', true]);
-        $this->assertStringStartsWith('[DEBUG]', $actual);
-        $this->assertRegExp('/foo: bar/u', $actual);
-
-        $actual = $this->invokeMethod($this->request, 'printDebug', ['foo', [100 => 200], true]);
-        $this->assertStringStartsWith('[DEBUG]', $actual);
-        $this->assertRegExp('/Array/u', $actual);
-        $this->assertRegExp('/\[100\] => 200/u', $actual);
-    }
-
-    public function testPrintDebugOff()
-    {
-        $actual = $this->invokeMethod($this->request, 'printDebug');
-        $this->assertFalse($actual);
-    }
 }

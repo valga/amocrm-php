@@ -4,6 +4,9 @@ namespace AmoCRM\Request;
 
 use AmoCRM\Exception;
 use AmoCRM\NetworkException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
 /**
  * Class Request
@@ -18,8 +21,10 @@ use AmoCRM\NetworkException;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-class Request
+class Request implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * @var bool Использовать устаревшую схему авторизации
      */
@@ -48,6 +53,7 @@ class Request
         }
 
         $this->parameters = $parameters;
+        $this->setLogger(new NullLogger());
     }
 
     /**
@@ -164,9 +170,6 @@ class Request
         $headers = $this->prepareHeaders($modified);
         $endpoint = $this->prepareEndpoint($url);
 
-        $this->printDebug('url', $endpoint);
-        $this->printDebug('headers', $headers);
-
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $endpoint);
@@ -175,13 +178,16 @@ class Request
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
+        $this->logger->debug('Set CURLOPT_URL to {endpoint}', ['endpoint' => $endpoint]);
+        $this->logger->debug('Set CURLOPT_HTTPHEADER to {headers}', ['headers' => $headers]);
+
         if ($this->parameters->hasPost()) {
             $fields = json_encode([
                 'request' => $this->parameters->getPost(),
             ]);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-            $this->printDebug('post params', $fields);
+            $this->logger->debug('Set CURLOPT_POSTFIELDS to {fields}', ['fields' => $fields]);
         }
 
         $result = curl_exec($ch);
@@ -191,10 +197,10 @@ class Request
 
         curl_close($ch);
 
-        $this->printDebug('curl_exec', $result);
-        $this->printDebug('curl_getinfo', $info);
-        $this->printDebug('curl_error', $error);
-        $this->printDebug('curl_errno', $errno);
+        $this->logger->debug('Result of curl_exec is {curl_exec}', ['curl_exec' => $result]);
+        $this->logger->debug('Result of curl_getinfo is {curl_getinfo}', ['curl_getinfo' => $info]);
+        $this->logger->debug('Result of curl_error is {curl_error}', ['curl_error' => $error]);
+        $this->logger->debug('Result of curl_errno is {curl_errno}', ['curl_errno' => $errno]);
 
         if ($result === false && !empty($error)) {
             throw new NetworkException($error, $errno);
@@ -230,32 +236,5 @@ class Request
         }
 
         return $result['response'];
-    }
-
-    /**
-     * Вывода отладочной информации
-     *
-     * @param string $key Заголовок отладочной информации
-     * @param mixed $value Значение отладочной информации
-     * @param bool $return Возврат строки вместо вывода
-     * @return mixed
-     */
-    protected function printDebug($key = '', $value = null, $return = false)
-    {
-        if ($this->debug !== true) {
-            return false;
-        }
-
-        if (!is_string($value)) {
-            $value = print_r($value, true);
-        }
-
-        $line = sprintf('[DEBUG] %s: %s', $key, $value);
-
-        if ($return === false) {
-            return print_r($line . PHP_EOL);
-        }
-
-        return $line;
     }
 }
