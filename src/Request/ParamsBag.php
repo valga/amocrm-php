@@ -95,16 +95,6 @@ class ParamsBag implements ParamsBagInterface
     }
 
     /**
-     * Получение количества GET параметров
-     *
-     * @return int количество GET параметров
-     */
-    public function hasGet()
-    {
-        return count($this->getParams) ? true : false;
-    }
-
-    /**
      * Очистка всех GET параметров
      *
      * @return $this
@@ -147,16 +137,6 @@ class ParamsBag implements ParamsBagInterface
         }
 
         return $this->postParams;
-    }
-
-    /**
-     * Получение количества POST параметров
-     *
-     * @return int количество POST параметров
-     */
-    public function hasPost()
-    {
-        return count($this->postParams) ? true : false;
     }
 
     /**

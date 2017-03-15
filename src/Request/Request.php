@@ -185,7 +185,7 @@ class Request implements LoggerAwareInterface
         $this->logger->debug('Set CURLOPT_URL to {endpoint}', ['endpoint' => $endpoint]);
         $this->logger->debug('Set CURLOPT_HTTPHEADER to {headers}', ['headers' => $headers]);
 
-        if ($this->parameters->hasPost()) {
+        if (count($this->parameters->getPost())) {
             $fields = json_encode([
                 'request' => $this->parameters->getPost(),
             ]);
