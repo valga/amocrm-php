@@ -226,6 +226,39 @@ try {
     * `apiLink($links = [])` - Метод позволяет устанавливать связи между сущностями
     * `apiUnlink($links = [])` - Метод позволяет удалять связи между сущностями
 
+## Логирование
+
+Клиент поддерживает ведение логов с использованием любых [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) совместимых логгеров. Пример интеграции с [Monolog](https://github.com/Seldaek/monolog).
+
+```
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+try {
+    $amo = new \AmoCRM\Client(getenv('DOMAIN'), getenv('LOGIN'), getenv('HASH'));
+
+    // https://github.com/Seldaek/monolog
+    $logger = new \Monolog\Logger('AmoCRM');
+    // https://github.com/Seldaek/monolog/blob/HEAD/doc/02-handlers-formatters-processors.md
+    $handler = new \Monolog\Handler\StreamHandler('php://stderr', \Monolog\Logger::DEBUG);
+    $logger->pushHandler($handler);
+
+    // Устанавливает экземпляр класса \Monolog\Logger как логгер
+    $amo->setLogger($logger);
+
+    // Получение информации по аккаунту в котором произведена авторизация
+    $amo->account->apiCurrent();
+
+    //
+    // [2017-03-15 16:19:00] AmoCRM.DEBUG: Request {"CURLOPT_URL":"https://example.amocrm.ru...
+    // [2017-03-15 16:19:00] AmoCRM.DEBUG: Response {"curl_exec":"{\"response\":{\"account\":...
+
+} catch (\AmoCRM\Exception $e) {
+    printf('Error (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
 ## Описание работы с Webhooks
 
 [Webhooks](https://developers.amocrm.ru/rest_api/webhooks.php) – это уведомление сторонних приложений посредством отправки уведомлений о событиях, произошедших в amoCRM. Вы можете настроить HTTP адреса ваших приложений и связанные с ними рабочие правила в настройках своего аккаунта, в разделе «API».
