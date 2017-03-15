@@ -28,8 +28,6 @@ class RequestTest extends TestCase
 
         $this->request = new Request();
         $this->request->setParameters($paramsBag);
-
-        $this->assertInstanceOf('\Psr\Log\LoggerAwareInterface', $this->request);
     }
 
     public function testGetParameters()
@@ -43,7 +41,15 @@ class RequestTest extends TestCase
 
     public function testSetLogger()
     {
+        $this->assertInstanceOf('\Psr\Log\LoggerAwareInterface', $this->request);
+        $this->assertAttributeInstanceOf('\Psr\Log\LoggerInterface', 'logger', $this->request);
+        $this->assertAttributeInstanceOf('\Psr\Log\NullLogger', 'logger', $this->request);
 
+        $mock = $this->getMockBuilder('\Psr\Log\NullLogger')->getMock();
+        $this->request->setLogger($mock);
+
+        $this->assertAttributeInstanceOf('\Psr\Log\LoggerInterface', 'logger', $this->request);
+        $this->assertAttributeSame($mock, 'logger', $this->request);
     }
 
     public function testGetRequest()
