@@ -4,8 +4,8 @@ namespace AmoCRM\Request;
 
 use AmoCRM\Exception;
 use AmoCRM\NetworkException;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
 /**
@@ -23,60 +23,64 @@ use Psr\Log\NullLogger;
  */
 class Request implements LoggerAwareInterface
 {
-    use LoggerAwareTrait;
-
     /**
      * @var bool Использовать устаревшую схему авторизации
      */
     protected $v1 = false;
 
     /**
-     * @var bool Флаг вывода отладочной информации
+     * @var ParamsBagInterface Экземпляр класса имплементирующего ParamsBagInterface
      */
-    private $debug = false;
+    protected $parameters;
 
     /**
-     * @var ParamsBag|null Экземпляр ParamsBag для хранения аргументов
+     * @var LoggerInterface Экземпляр класса имплементирующего LoggerInterface
      */
-    private $parameters = null;
+    protected $logger;
 
     /**
      * Request constructor
      *
-     * @param ParamsBag $parameters Экземпляр ParamsBag для хранения аргументов
      * @throws NetworkException
      */
-    public function __construct(ParamsBag $parameters)
+    public function __construct()
     {
         if (!function_exists('curl_init')) {
             throw new NetworkException('The cURL PHP extension was not loaded');
         }
 
-        $this->parameters = $parameters;
+        $this->setParameters(new ParamsBag());
         $this->setLogger(new NullLogger());
     }
 
     /**
-     * Установка флага вывода отладочной информации
+     * Устанавливает экземпляр класса имплементирующего ParamsBagInterface
      *
-     * @param bool $flag Значение флага
-     * @return $this
+     * @param ParamsBagInterface $parameters экземпляр класса имплементирующего ParamsBagInterface
      */
-    public function debug($flag = false)
+    public function setParameters(ParamsBagInterface $parameters)
     {
-        $this->debug = (bool)$flag;
-
-        return $this;
+        $this->parameters = $parameters;
     }
 
     /**
-     * Возвращает экземпляр ParamsBag для хранения аргументов
+     * Возвращает экземпляр класса имплементирующего ParamsBagInterface
      *
-     * @return ParamsBag|null
+     * @return ParamsBagInterface экземпляр класса имплементирующего ParamsBagInterface
      */
-    protected function getParameters()
+    public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * Устанавливает экземпляр класса имплементирующего LoggerInterface
+     *
+     * @param LoggerInterface $logger экземпляр класса имплементирующего LoggerInterface
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /**

@@ -30,14 +30,8 @@ class RequestTest extends TestCase
         $paramsBag->addAuth('domain', 'example');
         $paramsBag->addAuth('login', 'login@domain');
         $paramsBag->addAuth('apikey', 'hash');
-        $this->request = new RequestMock($paramsBag);
-    }
-
-    public function testDebug()
-    {
-        $this->assertAttributeEquals(false, 'debug', $this->request);
-        $this->request->debug(true);
-        $this->assertAttributeEquals(true, 'debug', $this->request);
+        $this->request = new RequestMock();
+        $this->request->setParameters($paramsBag);
     }
 
     public function testGetParameters()

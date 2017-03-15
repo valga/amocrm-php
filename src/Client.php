@@ -81,10 +81,12 @@ class Client
             throw new ModelException('Model not exists: ' . $name);
         }
 
-        // Чистим GET и POST от предыдущих вызовов
-        $this->parameters->clearGet()->clearPost();
+        $model = new $classname();
+        $model->setParameters(clone $this->parameters);
+        // TODO set logger
+        // $model->setLogger(clone $this->parameters);
 
-        return new $classname($this->parameters);
+        return $model;
     }
 
     /**
