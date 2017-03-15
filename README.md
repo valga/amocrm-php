@@ -230,11 +230,7 @@ try {
 
 Клиент поддерживает ведение логов с использованием любых [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) совместимых логгеров. Пример интеграции с [Monolog](https://github.com/Seldaek/monolog).
 
-```
-<?php
-
-require_once __DIR__ . '/../vendor/autoload.php';
-
+```php
 try {
     $amo = new \AmoCRM\Client(getenv('DOMAIN'), getenv('LOGIN'), getenv('HASH'));
 
