@@ -4,7 +4,7 @@ namespace AmoCRM\Tests\Models;
 
 use AmoCRM\Tests\TestCase;
 
-class WebHooksMock extends \AmoCRM\Models\WebHooks
+class WebhooksMock extends \AmoCRM\Models\Webhooks
 {
     public $mockUrl;
     public $mockParameters;
@@ -51,17 +51,17 @@ class WebHooksMock extends \AmoCRM\Models\WebHooks
     }
 }
 
-class WebHooksTest extends TestCase
+class WebhooksTest extends TestCase
 {
     /**
-     * @var null|WebHooksMock
+     * @var null|WebhooksMock
      */
     private $model = null;
 
     public function setUp()
     {
         $paramsBag = new \AmoCRM\Request\ParamsBag();
-        $this->model = new WebHooksMock($paramsBag);
+        $this->model = new WebhooksMock($paramsBag);
     }
 
     /**
