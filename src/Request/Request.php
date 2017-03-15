@@ -183,16 +183,18 @@ class Request implements LoggerAwareInterface
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-        $this->logger->debug('Set CURLOPT_URL to {endpoint}', ['endpoint' => $endpoint]);
-        $this->logger->debug('Set CURLOPT_HTTPHEADER to {headers}', ['headers' => $headers]);
+        $this->logger->debug('Request', [
+            'CURLOPT_URL' => $endpoint,
+            'CURLOPT_HTTPHEADER' => $headers,
+        ]);
 
         if (count($this->parameters->getPost())) {
-            $fields = json_encode([
+            $fields = [
                 'request' => $this->parameters->getPost(),
-            ]);
+            ];
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-            $this->logger->debug('Set CURLOPT_POSTFIELDS to {fields}', ['fields' => $fields]);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+            $this->logger->debug('Post field', ['CURLOPT_POSTFIELDS' => $fields]);
         }
 
         $result = curl_exec($ch);
@@ -202,12 +204,18 @@ class Request implements LoggerAwareInterface
 
         curl_close($ch);
 
-        $this->logger->debug('Result of curl_exec is {curl_exec}', ['curl_exec' => $result]);
-        $this->logger->debug('Result of curl_getinfo is {curl_getinfo}', ['curl_getinfo' => $info]);
-        $this->logger->debug('Result of curl_error is {curl_error}', ['curl_error' => $error]);
-        $this->logger->debug('Result of curl_errno is {curl_errno}', ['curl_errno' => $errno]);
+        $this->logger->debug('Response', [
+            'curl_exec' => $result,
+            'curl_getinfo' => $info,
+            'curl_error' => $error,
+            'curl_errno' => $errno,
+        ]);
 
         if ($result === false && !empty($error)) {
+            $this->logger->error('NetworkException', [
+                'message' => $error,
+                'code' => $errno
+            ]);
             throw new NetworkException($error, $errno);
         }
 
@@ -234,8 +242,15 @@ class Request implements LoggerAwareInterface
                 $code = $result['response']['error_code'];
             }
             if ($this->v1 === false) {
+                $this->logger->error('Exception', [
+                    'message' => $result['response']['error'],
+                    'code' => $code
+                ]);
                 throw new Exception($result['response']['error'], $code);
             } else {
+                $this->logger->error('Exception', [
+                    'message' => $result['response'],
+                ]);
                 throw new Exception(json_encode($result['response']));
             }
         }
