@@ -2,6 +2,7 @@
 
 namespace AmoCRM\Request;
 
+use DateTime;
 use AmoCRM\Exception;
 use AmoCRM\NetworkException;
 use Psr\Log\LoggerInterface;
@@ -131,7 +132,7 @@ class Request implements LoggerAwareInterface
         $headers = ['Content-Type: application/json'];
 
         if ($modified !== null) {
-            $headers[] = 'IF-MODIFIED-SINCE: ' . (new \DateTime($modified))->format(\DateTime::RFC1123);
+            $headers[] = 'IF-MODIFIED-SINCE: ' . (new DateTime($modified))->format(DateTime::RFC1123);
         }
 
         return $headers;
