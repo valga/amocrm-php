@@ -18,7 +18,6 @@ try {
     // Метод позволяет добавлять каталоги по одному или пакетно.
 
     $catalog = $amo->catalog;
-    $catalog->debug(true); // Режим отладки
     $catalog['name'] = 'Products';
 
     $id = $catalog->apiAdd();
@@ -35,7 +34,6 @@ try {
 
     // Обновление каталогов
     $catalog = $amo->catalog;
-    $catalog->debug(true); // Режим отладки
     $catalog['name'] = 'Tariffs';
 
     $catalog->apiUpdate((int)$id);

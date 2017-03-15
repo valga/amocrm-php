@@ -32,7 +32,6 @@ try {
     // а также обновлять данные по уже существующим примечаниям
 
     $note = $amo->note;
-    $note->debug(true); // Режим отладки
     $note['element_id'] = $contactId;
     $note['element_type'] = 1;
     $note['note_type'] = 4;
@@ -52,7 +51,6 @@ try {
 
     // Обновление задач
     $note = $amo->note;
-    $note->debug(true); // Режим отладки
     $note['element_id'] = $contactId;
     $note['element_type'] = 1;
     $note['note_type'] = 4;

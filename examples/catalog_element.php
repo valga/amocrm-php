@@ -17,7 +17,6 @@ try {
     // Метод позволяет добавлять элементы каталога по одному или пакетно
 
     $element = $amo->catalog_element;
-    $element->debug(true); // Режим отладки
     $element['catalog_id'] = 4179;
     $element['name'] = 'Product';
     $element->addCustomField(212937, 1);
@@ -36,7 +35,6 @@ try {
 
     // Обновление элементов каталога
     $element = $amo->catalog_element;
-    $element->debug(true); // Режим отладки
     $element['name'] = 'New product';
     $element['catalog_id'] = 4179; // без catalog_id amocrm не обновит
     $element->addCustomField(212937, 5000);

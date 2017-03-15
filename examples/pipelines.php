@@ -14,7 +14,6 @@ try {
     print_r($amo->pipelines->apiList(125373));
 
     $pipeline = $amo->pipelines;
-    $pipeline->debug(true); // Режим отладки
     $pipeline['name'] = 'Воронка 1';
     $pipeline['sort'] = 1;
     $pipeline['is_main'] = 'on'; // or 1, or true
@@ -44,7 +43,6 @@ try {
 
     // Обновление воронок и этапов продаж
     $pipeline = $amo->pipelines;
-    $pipeline->debug(true); // Режим отладки
     $pipeline['name'] = 'Воронка 3';
     // Обновление этапа с ID
     $pipeline->addStatusField([

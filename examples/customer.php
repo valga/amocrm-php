@@ -16,7 +16,6 @@ try {
     // Метод позволяет добавлять покупателей по одному или пакетно
 
     $customer = $amo->customer;
-    $customer->debug(true); // Режим отладки
     $customer['name'] = 'ФИО';
     $customer['request_id'] = '123456789';
     $customer['main_user_id'] = 151516;
@@ -39,7 +38,6 @@ try {
 
     // Обновление покупателей
     $customer = $amo->customer;
-    $customer->debug(true); // Режим отладки
     $customer['name'] = 'ФИО 3';
 
     $customer->apiUpdate((int)$id);

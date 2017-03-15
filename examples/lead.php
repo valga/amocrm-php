@@ -24,7 +24,6 @@ try {
     // а также обновлять данные по уже существующим сделкам.
 
     $lead = $amo->lead;
-    $lead->debug(true); // Режим отладки
     $lead['name'] = 'Тестовая сделка';
     $lead['date_create'] = '-2 DAYS';
     $lead['status_id'] = 10525225;
@@ -54,7 +53,6 @@ try {
 
     // Обновление сделок
     $lead = $amo->lead;
-    $lead->debug(true); // Режим отладки
     $lead['name'] = 'Тестовая сделка 3';
 
     $lead->apiUpdate((int)$id, 'now');

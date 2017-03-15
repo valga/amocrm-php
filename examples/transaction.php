@@ -16,7 +16,6 @@ try {
     // Метод позволяет добавлять элементы каталога по одному или пакетно
 
     $transaction = $amo->transaction;
-    $transaction->debug(true); // Режим отладки
     $transaction['customer_id'] = 29729;
     $transaction['date'] = 'now';
     $transaction['price'] = 3500;

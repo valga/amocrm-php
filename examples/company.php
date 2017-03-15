@@ -24,7 +24,6 @@ try {
     // а также обновлять данные по уже существующим компаниям
 
     $company = $amo->company;
-    $company->debug(true); // Режим отладки
     $company['name'] = 'ООО Тестовая компания';
     $company['request_id'] = '123456789';
     $company['date_create'] = '-2 DAYS';
@@ -49,7 +48,6 @@ try {
 
     // Обновление компаний
     $company = $amo->company;
-    $company->debug(true); // Режим отладки
     $company['name'] = 'ООО Тестовая компания 3';
 
     $company->apiUpdate((int)$id, 'now');

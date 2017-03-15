@@ -24,7 +24,6 @@ try {
     // а также обновлять данные по уже существующим контактам.
 
     $contact = $amo->contact;
-    $contact->debug(true); // Режим отладки
     $contact['name'] = 'ФИО';
     $contact['request_id'] = '123456789';
     $contact['date_create'] = '-2 DAYS';
@@ -49,7 +48,6 @@ try {
 
     // Обновление контактов
     $contact = $amo->contact;
-    $contact->debug(true); // Режим отладки
     $contact['name'] = 'ФИО 3';
 
     $contact->apiUpdate((int)$id, 'now');

@@ -27,7 +27,6 @@ try {
     // а также обновлять данные по уже существующим задачам
 
     $task = $amo->task;
-    $task->debug(true); // Режим отладки
     $task['element_id'] = 11029224;
     $task['element_type'] = 1;
     $task['date_create'] = '-2 DAYS';
@@ -50,8 +49,6 @@ try {
 
     // Обновление задач
     $task = $amo->task;
-    $task->debug(true); // Режим отладки
-
     $task->apiUpdate((int)$id, 'Текст задачи', 'now');
 
 } catch (\AmoCRM\Exception $e) {

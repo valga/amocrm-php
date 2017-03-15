@@ -9,7 +9,6 @@ try {
     // Метод позволяет добавлять дополнительные поля по одному или пакетно
 
     $field = $amo->custom_field;
-    //$field->debug(true); // Режим отладки
     $field['name'] = 'Tracking ID';
     $field['type'] = \AmoCRM\Models\CustomField::TYPE_TEXT;
     $field['element_type'] = \AmoCRM\Models\CustomField::ENTITY_CONTACT;
@@ -20,7 +19,6 @@ try {
 
     // Удаление дополнительных полей
     $field = $amo->custom_field;
-    //$field->debug(true); // Режим отладки
     $result = $field->apiDelete($id, '528d0285c1f9180911159a9dc6f759b3_zendesk_widget');
     var_dump($result);
 
