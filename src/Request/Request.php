@@ -164,6 +164,14 @@ class Request
             }
         }
 
+        if ($this->hasOauthToken()) {
+            $token = $this->parameters->getAuth('apikey');
+            if (empty($token)) {
+                throw new \DomainException('OAuth token is empty.');
+            }
+            $headers[] = "Authorization: Bearer {$token}";
+        }
+
         return $headers;
     }
 
@@ -175,6 +183,15 @@ class Request
      */
     protected function prepareEndpoint($url)
     {
+        if ($this->hasOauthToken()) {
+            return sprintf(
+                'https://%s%s?%s',
+                $this->parameters->getAuth('domain'),
+                $url,
+                http_build_query($this->parameters->getGet())
+            );
+        }
+
         if ($this->v1 === false) {
             $query = http_build_query(array_merge($this->parameters->getGet(), [
                 'USER_LOGIN' => $this->parameters->getAuth('login'),
@@ -310,5 +327,14 @@ class Request
         }
 
         return $line;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasOauthToken()
+    {
+        $oauth = $this->parameters->getAuth('oauth');
+        return (bool) $oauth;
     }
 }
